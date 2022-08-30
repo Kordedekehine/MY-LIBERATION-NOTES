@@ -8,6 +8,8 @@ public class NoteResponseDto {
 
     private String description;
 
+    private String mood;
+
     private String image1;
 
     private String image2;
@@ -20,6 +22,14 @@ public class NoteResponseDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMood() {
+        return mood;
+    }
+
+    public void setMood(String mood) {
+        this.mood = mood;
     }
 
     public String getTitle() {

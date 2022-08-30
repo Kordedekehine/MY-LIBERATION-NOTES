@@ -9,12 +9,22 @@ public class NoteRequestDto {
 
     private String description;
 
+    private String mood;
+
     private MultipartFile image1;
 
     private MultipartFile image2;
 
     private MultipartFile image3;
 
+
+    public String getMood() {
+        return mood;
+    }
+
+    public void setMood(String mood) {
+        this.mood = mood;
+    }
 
     public String getTitle() {
         return title;
