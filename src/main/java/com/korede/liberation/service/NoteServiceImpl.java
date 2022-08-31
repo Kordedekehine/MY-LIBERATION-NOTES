@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -135,14 +137,45 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public NoteListResponseDto searchNoteByDate(NoteFilterDateRequestDto noteFilterDateRequestDto) throws GeneralServiceException {
-        if (noteFilterDateRequestDto != null){
-            LocalDateTime truncatedDate = noteFilterDateRequestDto.getDate().truncatedTo(ChronoUnit.DAYS);
-            List<Note> dates = noteRepository.findNoteByDate(truncatedDate);
-            return (NoteListResponseDto) dates;
+    public NoteListResponseDto searchByDate(int page, int size, NoteFilterDateRequestDto noteFilterDateRequestDto) throws GeneralServiceException {
+
+        Pageable pageable = PageRequest.of((page - 1),size);
+
+        NoteListResponseDto noteListResponseDto = new NoteListResponseDto();
+
+        Page<Note> notes = noteRepository.findAll(pageable);
+
+        List<Note> noteList = notes.getContent();
+
+        if (noteFilterDateRequestDto.getDay() != null){
+            noteList = noteList.stream().filter(note -> note.getDay().contains(noteFilterDateRequestDto.getDay()
+            )).collect(Collectors.toList());
         }
-        throw new GeneralServiceException("No Record for the specific date");
+        if (noteFilterDateRequestDto.getMonth() != null){
+            noteList = noteList.stream().filter(note -> note.getMonth().contains(noteFilterDateRequestDto.getMonth()
+            )).collect(Collectors.toList());
+        }
+        if (noteFilterDateRequestDto.getYear() != null){
+            noteList = noteList.stream().filter(note -> note.getYear().contains(noteFilterDateRequestDto.getYear()
+            )).collect(Collectors.toList());
+        }
+
+        int totalSizeOfList = noteList.size();
+
+        List<NoteResponseDto> noteResponseDtoList = new ArrayList<>();
+
+        for (Note note: noteList){
+
+            NoteResponseDto noteResponseDto = new NoteResponseDto();
+
+            modelMapper.map(note,noteResponseDto);
+            noteResponseDtoList.add(noteResponseDto);
+        }
+       noteListResponseDto.setNoteResponseDtoList(noteResponseDtoList);
+        noteListResponseDto.setSizeOfList(totalSizeOfList);
+        return noteListResponseDto;
     }
+
 
 //    @Override
 //    public NoteDeleteResponseDto deletenotes(Long id) throws GeneralServiceException {

@@ -5,7 +5,6 @@ import com.korede.liberation.dto.NoteFilterMoodRequestDto;
 import com.korede.liberation.dto.NoteFilterTitleRequestDto;
 import com.korede.liberation.dto.NoteRequestDto;
 import com.korede.liberation.exception.GeneralServiceException;
-import com.korede.liberation.exception.ImageUploadException;
 import com.korede.liberation.service.NoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Controller
 public class NoteController {
@@ -68,12 +70,14 @@ public class NoteController {
     }
 
    @PostMapping("/date-search")
-   public ResponseEntity<?> searchByDate(@RequestBody NoteFilterDateRequestDto noteFilterDateRequestDto){
-        try {
-            return new ResponseEntity<>(noteService.searchNoteByDate(noteFilterDateRequestDto),
-                    HttpStatus.OK);
+   public ResponseEntity<?> searchByDate(@RequestParam(value = "page",defaultValue = "1") int page,
+                                         @RequestParam(value = "size",defaultValue = "3") int size,
+                                         @RequestBody NoteFilterDateRequestDto noteFilterDateRequestDto){
+        try{
+            return new ResponseEntity<>(noteService.searchByDate(page,size,noteFilterDateRequestDto),
+            HttpStatus.OK);
         } catch (Exception e) {
-             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
    }
 

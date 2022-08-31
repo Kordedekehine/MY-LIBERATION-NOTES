@@ -2,8 +2,12 @@ package com.korede.liberation.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -12,36 +16,68 @@ import java.util.Date;
 public class Note {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Identity lets the database handle the primary key gereration
     private Long id;
 
-    @NotNull
-    @Column(name = "title")
+    @Column
     private String title;
 
-    @NotNull
-    @Column(name = "description")
+    //create table note (id bigint not null auto_increment, day varchar(255), description varchar(255), image1 varchar(255), image2 varchar(255), image3 varchar(255), month varchar(255), mood varchar(255), title varchar(255), year varchar(255), primary key (id)) engine=InnoDB
+    @NotBlank
     private String description;
 
-    @NotNull //don't wanna use enum --Note user can search with it
-    @Column  //frontend restrict it to happy,sad,angry,calm or indefferent-with emojis
+    //don't wanna use enum --Note user can search with it
+     //frontend restrict it to happy,sad,angry,calm or indefferent-with emojis
+    @Column
+    @NotBlank
     private String mood;
 
-    @JsonFormat(pattern = "yy/MM/dd")
-    private LocalDateTime date;
+    //basically for perfect date search--//TODO PERFECT DATE INTEGRATION
+    @Column
+    @NotBlank
+   private String day;
 
     @Column
+    @NotBlank
+    private String month;
+
+    @Column
+    @NotBlank
+    private String year;
+    //set the images nullable to true, there are some days we just want to capture anything
+    //though the field is nullable by default
+    @Column
     private String image1;
+
     @Column
     private String image2;
     @Column
     private String image3;
 
 
-    //    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(name = "create_date", nullable = false)
-//    private Date createDate;
+    public String getDay() {
+        return day;
+    }
 
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public String getMood() {
         return mood;
@@ -49,14 +85,6 @@ public class Note {
 
     public void setMood(String mood) {
         this.mood = mood;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
     }
 
     public String getImage1() {
