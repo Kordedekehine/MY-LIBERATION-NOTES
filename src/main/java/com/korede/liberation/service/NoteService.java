@@ -19,4 +19,5 @@ public interface NoteService {
    NoteListResponseDto searchByDate(int page,int size,NoteFilterDateRequestDto noteFilterDateRequestDto) throws GeneralServiceException;
    // You cannot tear a page of a diary
    // NoteDeleteResponseDto deletenotes(Long id) throws  GeneralServiceException;
+//   List<Note> getNoteByDate(LocalDateTime dateTime) throws GeneralServiceException;
 }

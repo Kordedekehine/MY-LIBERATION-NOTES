@@ -1,31 +1,33 @@
 package com.korede.liberation.controller;
 
+import com.korede.liberation.ApiRoutes;
 import com.korede.liberation.dto.NoteFilterDateRequestDto;
 import com.korede.liberation.dto.NoteFilterMoodRequestDto;
 import com.korede.liberation.dto.NoteFilterTitleRequestDto;
 import com.korede.liberation.dto.NoteRequestDto;
 import com.korede.liberation.exception.GeneralServiceException;
+import com.korede.liberation.model.Note;
 import com.korede.liberation.service.NoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 @Controller
+@RequestMapping("/api")
 public class NoteController {
-
     private static Logger log = LoggerFactory.getLogger(NoteController.class);
 
     @Autowired
     NoteService noteService;
 
-    @PostMapping("/savenote")
+    @PostMapping(value = ApiRoutes.SAVE_NOTES)
     public ResponseEntity<?> save(@ModelAttribute NoteRequestDto noteRequestDto) {
         log.info(noteRequestDto.toString());
         try {
@@ -35,7 +37,7 @@ public class NoteController {
         }
     }
 
-    @GetMapping("/listnotes")
+    @GetMapping(ApiRoutes.LIST_OF_NOTES)
     public ResponseEntity<?> listAll(@RequestParam(value = "page",defaultValue = "1") int page,
                                      @RequestParam(value = "size",defaultValue = "3") int size){
       try{
@@ -45,7 +47,7 @@ public class NoteController {
       }
     }
 
-   @PostMapping("/title-search")
+   @PostMapping(ApiRoutes.SEARCH_WITH_TITLE)
     public ResponseEntity<?> searchByTitle(@RequestParam(value = "page",defaultValue = "1") int page,
                                            @RequestParam(value = "size",defaultValue = "3") int size,
                                            @RequestBody NoteFilterTitleRequestDto noteFilterTitleRequestDto){
@@ -57,7 +59,7 @@ public class NoteController {
         }
    }
 
-    @PostMapping("/mood-search")
+    @PostMapping(ApiRoutes.SEARCH_WITH_MOOD)
     public ResponseEntity<?> searchByTitle(@RequestParam(value = "page",defaultValue = "1") int page,
                                            @RequestParam(value = "size",defaultValue = "3") int size,
                                            @RequestBody NoteFilterMoodRequestDto noteFilterMoodRequestDto){
@@ -69,7 +71,7 @@ public class NoteController {
         }
     }
 
-   @PostMapping("/date-search")
+   @PostMapping(ApiRoutes.SEARCH_WITH_DATE)
    public ResponseEntity<?> searchByDate(@RequestParam(value = "page",defaultValue = "1") int page,
                                          @RequestParam(value = "size",defaultValue = "3") int size,
                                          @RequestBody NoteFilterDateRequestDto noteFilterDateRequestDto){
@@ -80,6 +82,26 @@ public class NoteController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
    }
+
+   // @GetMapping("/order/{id}")
+    //    public ResponseEntity<?> getOrderById(@PathVariable String id){
+    //        try {
+    //            OrderCreationResponse orderCreationResponse = userServices.getOrderById(id);
+    //            return ResponseEntity.status(HttpStatus.OK).body(orderCreationResponse);
+    //        }
+    //        catch (BusinessLogicException exception){
+    //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    //        }
+    //    }
+
+//    @PostMapping
+//    public ResponseEntity<?> getNotesByDate(@PathVariable LocalDateTime dateTime){
+//        try {
+//           return new ResponseEntity<>(noteService.getNoteByDate(dateTime),HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 //   @PostMapping("/delete-notes")
 //   public ResponseEntity<?> deleteNote(@PathVariable("id") Long id){

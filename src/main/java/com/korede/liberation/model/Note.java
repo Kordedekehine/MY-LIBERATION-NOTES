@@ -1,6 +1,10 @@
 package com.korede.liberation.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.sun.istack.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,8 +30,14 @@ public class Note {
     @NotBlank
     private String description;
 
-    //don't wanna use enum --Note user can search with it
-     //frontend restrict it to happy,sad,angry,calm or indefferent-with emojis
+//    @Column
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+//    @JsonSerialize(using = ToStringSerializer.class)
+//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+//    private LocalDateTime date;
+
+
     @Column
     @NotBlank
     private String mood;
@@ -44,8 +54,7 @@ public class Note {
     @Column
     @NotBlank
     private String year;
-    //set the images nullable to true, there are some days we just want to capture anything
-    //though the field is nullable by default
+
     @Column
     private String image1;
 
@@ -135,4 +144,5 @@ public class Note {
         this.description = description;
     }
 
+    ///oauth2/authorization/github--link
 }

@@ -176,6 +176,16 @@ public class NoteServiceImpl implements NoteService {
         return noteListResponseDto;
     }
 
+//    @Override
+//    public List<Note> getNoteByDate(LocalDateTime dateTime) throws GeneralServiceException {
+//        LocalDateTime localDateTime = dateTime.truncatedTo(ChronoUnit.DAYS);
+//        List<Note> notes = noteRepository.findByNoteDate(localDateTime);
+//        if (notes.isEmpty()){
+//            throw new GeneralServiceException("There are no documentation for this day");
+//        }
+//        return notes;
+//    }
+
 
 //    @Override
 //    public NoteDeleteResponseDto deletenotes(Long id) throws GeneralServiceException {
